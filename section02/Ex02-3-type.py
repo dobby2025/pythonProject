@@ -13,6 +13,9 @@
 논리 유형 : bool
 바이너리 유형 : bytes
 없음 유형 : None
+
+git 테스트
+
 '''
 # str
 x = 'Hello, World'
