@@ -75,14 +75,3 @@ print(thislist)
 # 객체 삭제
 # del thislist
 # print(thislist)
-
-
-
-
-
-
-
-
-
-
-
