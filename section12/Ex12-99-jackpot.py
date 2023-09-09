@@ -22,3 +22,4 @@ for n in range(1, 7): # 1~6
 jackpot.sort()
 print(f'이번 당첨번호는 {jackpot} 입니다.')
 
+
