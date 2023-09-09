@@ -25,5 +25,3 @@ print(f'1000g = {pounds}pounds')
 
 
 
-
-
