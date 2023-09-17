@@ -29,7 +29,7 @@ for idx, movie in enumerate(movie_list):
 # 데이터프레임 객체 생성
 df = pd.DataFrame(data)
 
-# openpyxl 모듈 필요
+# openpyxl 모듈 필요 - pip install openpyxl
 df.to_excel('movie_ranking.xlsx', index=False)
 
 print('데이터 엑셀파일로 저장')
