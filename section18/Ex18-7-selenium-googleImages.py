@@ -52,16 +52,18 @@ def download_images(keyword, num_images=10, output_dir='images'):
         os.makedirs(output_dir)
         
     # 썸네일 요소 선택
-    thumbnails = driver.find_element(By.CSS_SELECTOR, '.rg_i')
+    thumbnails = driver.find_elements(By.CSS_SELECTOR, '.rg_i')
     
     # 썸내일 클릭 및 이미지 다운로드
     for index, thumbnail in enumerate(thumbnails[:num_images]):
         try:
             thumbnail.click()
+
             time.sleep(2)
-            
+
             # 이미지 요소 대기 및 선택
             image = WebDriverWait(driver, 10).until(
+                # r48jcc pT0Scc iPVvYb
                 EC.presence_of_element_located(
                     (By.CSS_SELECTOR, '.r48jcc.pT0Scc.iPVvYb')
                 )
@@ -70,7 +72,7 @@ def download_images(keyword, num_images=10, output_dir='images'):
             # 이미지 URL 가져오기
             image_url = image.get_attribute('src')
 
-            if image_url.startwith('data:'):
+            if image_url.startswith('data:'):
                 continue
 
             headers = {'User-Agent': 'Mozilla/5.0'}
@@ -78,6 +80,7 @@ def download_images(keyword, num_images=10, output_dir='images'):
             with urllib.request.urlopen(request) as response:
                 with open(f'{output_dir}/{keyword}_{index}.jpg', 'wb') as out_file:
                     out_file.write(response.read())
+
 
         except Exception as e:
             print(f'Error downloading image {index}: {e}')
