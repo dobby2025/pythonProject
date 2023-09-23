@@ -16,6 +16,15 @@ class LinkedList:
     def __init__(self):
         self.head = None
 
+    '''
+    7 3 9 1 6 
+
+    self.haed = Node(7) -> Node(3) -> Node(9) -> Node(1) -> Node(6)
+    new_node = Node(6)
+    current = Node(1)
+    
+
+    '''
     def add_node(self, data):
         new_node = Node(data)  # 새로운 노드 생성
 
@@ -30,6 +39,15 @@ class LinkedList:
 
         current.next = new_node
 
+    '''
+    self.haed = Node(7) -> Node(3) ->  Node(99) ->  Node(9) -> Node(1) -> Node(6)
+    
+    find_data = 9
+    insert_data = 99
+    current = Node(3)
+    new_node = Node(99, Node(9))
+    
+    '''
     def insert_node(self, find_data, insert_data):
         if self.head is None:
             return
