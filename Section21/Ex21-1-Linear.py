@@ -25,7 +25,7 @@ class LinearList():
         linear[lLen - 1] = data
 
     # 데이터 삽입
-    def inssert_data(self, position, data):
+    def insert_data(self, position, data):
         linear = self.linear
 
         if position < 0 or position > len(linear):
@@ -50,7 +50,7 @@ linear.add_data(4)
 linear.add_data(2)
 linear.add_data(6)
 
-linear.inssert_data(3, 99)
+linear.insert_data(3, 99)
 
 print(linear.linear)
 
