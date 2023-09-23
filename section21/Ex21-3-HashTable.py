@@ -23,10 +23,16 @@ class HashTable:
         # key : 'John Doe'
         # value : '555-555-5555'
         hash_index = self.hash_function(key)
+        print(f'key: {key}')
+        print(f'hash_index: {hash_index}')
 
         if self.hash_table[hash_index] is None:
             self.hash_table[hash_index] = []
         self.hash_table[hash_index].append((key, value))
+
+        print(f'hash_table[{hash_index}]: {self.hash_table[hash_index]}')
+
+
 
     def search(self, key):
         hash_index = self.hash_function(key)
@@ -44,9 +50,9 @@ hash_table = HashTable(10)  # 크기가 10인 hashtable 생성
 hash_table.insert('John Doe', '555-555-5555')
 hash_table.insert('Jane Doe', '555-555-5556')
 hash_table.insert('Jim Doe', '555-555-5557')
-hash_table.insert('KoreaIT', '555-555-5558')
-
-print(hash_table.search('John Doe'))
-print(hash_table.search('Jane Doe'))
-print(hash_table.search('Jim Doe'))
-print(hash_table.search('KoreaIT'))
+# hash_table.insert('KoreaIT', '555-555-5558')
+#
+# print(hash_table.search('John Doe'))
+# print(hash_table.search('Jane Doe'))
+# print(hash_table.search('Jim Doe'))
+# print(hash_table.search('KoreaIT'))
