@@ -14,6 +14,7 @@ class HashTable:
         self.size = size
         self.hash_table = [None] * self.size
 
+
     def hash_function(self, key):
         return hash(key) % self.size
 
@@ -21,7 +22,7 @@ class HashTable:
 
         # key : 'John Doe'
         # value : '555-555-5555'
-        hash_index = self.has_function(key)
+        hash_index = self.hash_function(key)
 
         if self.hash_table[hash_index] is None:
             self.hash_table[hash_index] = []
@@ -38,6 +39,7 @@ class HashTable:
         return None
 
 # 실행 코드
+
 hash_table = HashTable(10)  # 크기가 10인 hashtable 생성
 hash_table.insert('John Doe', '555-555-5555')
 hash_table.insert('Jane Doe', '555-555-5556')
