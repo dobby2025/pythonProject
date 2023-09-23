@@ -41,7 +41,7 @@ class LinearList():
 
         linear[position] = data
 
-    def delete_date(self, position):
+    def delete_data(self, position):
         linear = self.linear
 
         if position < 0 or position > len(linear):
@@ -68,7 +68,7 @@ linear.add_data(6)
 
 linear.insert_data(3, 99)
 
-linear.delete_date(2)
+linear.delete_data(2)
 
 print(linear.linear)
 
