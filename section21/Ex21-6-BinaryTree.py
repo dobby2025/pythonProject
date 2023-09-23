@@ -59,12 +59,37 @@ class BinaryTree:
 
     # 삽입 메소드 : 이진 탐색을 사용하여 새 노드를 삽입
 
+    '''
+    3 7 2 4 6 8 
+    
+    insert(3)
+        _insert(3, Node(5))
+    '''
+
     def insert(self, value):
         if not self.root:
             self.root = TreeNode(value)
         else:
             self._insert(value, self.root)
 
+    '''
+    3 7 2 4 6 8 
+    
+    Node(5).left -> Node(3).left -> Node(2)
+                           .right -> Node(4)
+           .right -> Node(7).left -> Node(6)
+                            .right -> Node(8)
+             
+    insert(8) 
+        _insert(8, Node(5))
+            value = 8
+            current_node = Node(5)
+            _insert(8, Node(7))
+                value = 8
+                current_node = Node(7) 
+                current_node.right = Node(8)
+              
+    '''
 
     def _insert(self, value, current_node):
         if value < current_node.value:
@@ -74,7 +99,6 @@ class BinaryTree:
                 self._insert(value, current_node.left)
 
         elif value > current_node.value:
-
             if not current_node.right:
                 current_node.right = TreeNode(value)
             else:
