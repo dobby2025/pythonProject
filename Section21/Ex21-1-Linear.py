@@ -41,6 +41,22 @@ class LinearList():
 
         linear[position] = data
 
+    def delete_date(self, position):
+        linear = self.linear
+
+        if position < 0 or position > len(linear):
+            print('데이터를 삭제할 범위를 벗어났습니다.')
+            return
+
+        linear[position] = None
+        linearSize = len(linear)
+
+        for i in range(position + 1, linearSize):
+            linear[i - 1] = linear[i]
+            linear[i] = None
+
+        del(linear[linearSize - 1])
+
 
 # 실행코드
 linear = LinearList()
@@ -52,7 +68,12 @@ linear.add_data(6)
 
 linear.insert_data(3, 99)
 
+linear.delete_date(2)
+
 print(linear.linear)
+
+
+
 
 
 
