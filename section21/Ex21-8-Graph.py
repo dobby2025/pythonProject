@@ -9,9 +9,17 @@ class Graph:
     def __init__(self, vertices):
         self.vertices = vertices
         self.adj_list = {}
+        '''
+         self.adj_list[vertex] = {'A':[B,],'B':[A,],'C':[],'D':[],'E':[]}
+        '''
         for vertex in vertices:
             self.adj_list[vertex] = []
 
+    '''
+    add_edge('A', 'B')
+        self.adj_list['A'].append('B')
+        self.adj_list['B'].append('A')
+    '''
     def add_edge(self, u, v):
         self.adj_list[u].append(v)
         self.adj_list[v].append(u)
@@ -33,5 +41,15 @@ graph.add_edge('A', 'C')
 graph.add_edge('B', 'D')
 graph.add_edge('C', 'D')
 graph.add_edge('C', 'E')
+
+'''
+{
+    A:[B, C],
+    B:[A, D],
+    C:[A, D, E],
+    D:[B, C],
+    E:[C]
+}
+'''
 
 graph.print_graph()
