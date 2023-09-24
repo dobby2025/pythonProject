@@ -20,6 +20,55 @@ class BinaryTree:
     def __init__(self, root):
         self.root = TreeNode(root) # 루트노드
 
+
+    # 전위순회 root -> left -> right
+    '''
+    1.  <- "5#3#2#4#7#6#8#"
+    preorder_traversal(bt.root, "")
+    bt.root = Node(5)
+    start = Node(5)
+    traversal = "5#"
+        2-1 <- "5#3#2#4#"
+        preorder_traversal(Node(3), "5#")
+        start = Node(3)
+        traversal = "5#3#"                          
+            3-1 <-"5#3#2#"
+            preorder_traversal(Node(2), "5#3#")
+            start = Node(2)
+            traversal = "5#3#2#"
+                4-1
+                preorder_traversal(None, "5#3#2#")  => traversal = "5#3#2#"
+                4-2
+                preorder_traversal(None, "5#3#2#")  => traversal = "5#3#2#"
+            3-2 <-"5#3#2#4#"
+            preorder_traversal(Node(4), "5#3#2#")
+            start = Node(4)
+            traversal = "5#3#2#4#"
+                 4-1
+                 preorder_traversal(None, "5#3#2#4#")
+                 4-2
+                 preorder_traversal(None, "5#3#2#4#")   => "5#3#2#4#"
+        2-2  <- "5#3#2#4#7#6#8#"
+        preorder_traversal(Node(7), "5#3#2#4#")
+        start = Node(7)
+        traversal = "5#3#2#4#7#"
+            3-1 <- "5#3#2#4#7#6#"
+            preorder_traversal(Node(6), "5#3#2#4#7#")
+            start = Node(6)
+            traversal = "5#3#2#4#7#6#"
+                4-1
+                preorder_traversal(None,  "5#3#2#4#7#6#")  =>  "5#3#2#4#7#6#"
+                4-2
+                preorder_traversal(None,  "5#3#2#4#7#6#")  =>  "5#3#2#4#7#6#"
+            3-2   <- "5#3#2#4#7#6#8#"
+            preorder_traversal(Node(8), "5#3#2#4#7#6#")
+            start = Node(8)
+            traversal = "5#3#2#4#7#6#8#"
+                4-1
+                preorder_traversal(None,  "5#3#2#4#7#6#8#")  =>  "5#3#2#4#7#6#8#"
+                4-2
+                preorder_traversal(None,  "5#3#2#4#7#6#8#")  =>  "5#3#2#4#7#6#8#"               
+    '''
     def preorder_traversal(self, start, traversal):
         if start:
             traversal += (str(start.value) + '#')
@@ -29,6 +78,55 @@ class BinaryTree:
             traversal = self.preorder_traversal(start.right, traversal)
         return traversal
 
+    '''
+    중위순회 left -> root -> right
+    1.   <- "2#3#4#5#6#7#8#"
+    inorder_traversal(bt.root, ""))
+    bt.root = Node(5)
+    start = Node(5)
+    traversal = "2#3#4#5#"
+        2-1 <- "2#3#4#"
+        inorder_traversal(Node(3), "")
+        start = Node(3)
+        traversal ="2#3#"
+            3-1 <- "2#"
+            inorder_traversal(Node(2), "")
+            start = Node(2)
+            traversal ="2#"
+                4-1
+                inorder_traversal(None, "") => ""
+                4-2
+                inorder_traversal(None, "2#") => "2#"
+            3-2 <- "2#3#4#"
+            inorder_traversal(Node(4), "2#3#")
+            start = Node(4)
+            traversal ="2#3#4#"
+                4-1
+                inorder_traversal(None, "2#3#")
+                4-2
+                inorder_traversal(None, "2#3#4#")  => "2#3#4#"
+        2-2   <- "2#3#4#5#6#7#8#"
+        inorder_traversal(Node(7), "2#3#4#5#")
+        start = Node(7)
+        traversal = "2#3#4#5#6#7#"
+            3-1 <- "2#3#4#5#6#"
+            inorder_traversal(Node(6), "2#3#4#5#")
+            start = Node(6)
+            traversal = "2#3#4#5#6#"  
+                4-1
+                inorder_traversal(None, "2#3#4#5#")
+                4-2
+                inorder_traversal(None, "2#3#4#5#6#")  => "2#3#4#5#6#"
+            3-2     <- "2#3#4#5#6#7#8#"
+            inorder_traversal(Node(8), "2#3#4#5#6#7#")
+            start = Node(8)
+            traversal = "2#3#4#5#6#7#8#"
+                4-1
+                inorder_traversal(None, "2#3#4#5#6#7#")
+                4-2
+                inorder_traversal(None, "2#3#4#5#6#7#8#")  => "2#3#4#5#6#7#8#"
+            
+    '''
     def inorder_traversal(self, start, traversal):
         if start:
             traversal = self.inorder_traversal(start.left, traversal)
