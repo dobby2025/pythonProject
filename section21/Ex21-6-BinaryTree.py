@@ -135,11 +135,58 @@ class BinaryTree:
         return traversal
 
     # 후위순회 left -> right -> root
+    '''
+    1. <- "2#4#3#6#8#7#5#"
+    postorder_traversal(bt.root, "")
+    bt.root = Node(5)
+    start = Node(5)
+    traversal = ""
+        2-1. <- "2#4#3#"
+        postorder_traversal(Node(3), "")
+        start = Node(3)
+        traversal = "2#4#3#"
+            3-1 <- "2#"
+            postorder_traversal(Node(2), "")
+            start = Node(2)
+            traversal = "2#"    => "2#"
+                4-1
+                postorder_traversal(None, "")   => ""
+                4-2
+                postorder_traversal(None, "")   => ""
+            3-2 <- "2#4#"
+            postorder_traversal(Node(4), "2#")
+            start = Node(4)
+            traversal = "2#4#"
+                4-1
+                postorder_traversal(None, "2#")   => "2#"
+                4-2
+                postorder_traversal(None, "2#")   => "2#"
+        2-2 <- "2#4#3#6#8#7#"
+        postorder_traversal(Node(7), "2#4#3#")
+        start = Node(7)
+        traversal =  "2#4#3#6#8#7#"
+            3-1 <- "2#4#3#6#"
+            postorder_traversal(Node(6), "2#4#3#")
+            start = Node(6)
+            traversal = "2#4#3#6#"
+                4-1
+                postorder_traversal(None, "2#4#3#")   => "2#4#3#"
+                4-2
+                postorder_traversal(None, "2#4#3#")   => "2#4#3#"
+            3-2 <- "2#4#3#6#8#"
+            postorder_traversal(Node(8), "2#4#3#6#")
+            start = Node(8)
+            traversal = "2#4#3#6#8#"
+                4-1
+                postorder_traversal(None, "2#4#3#6#")   => "2#4#3#6#"
+                4-2
+                postorder_traversal(None, "2#4#3#6#")   => "2#4#3#6#"
+    '''
     def postorder_traversal(self, start, traversal):
         if start:
             traversal = self.postorder_traversal(start.left, traversal)
             traversal = self.postorder_traversal(start.right, traversal)
-            traversal += (str(start.value) + ' ')
+            traversal += (str(start.value) + '#')
         return traversal
 
     def search(self, value):
