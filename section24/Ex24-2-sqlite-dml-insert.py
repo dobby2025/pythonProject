@@ -15,7 +15,7 @@ sql = "INSERT INTO employees " \
     "(first_name, last_name, email, " \
     "hire_date, job_id, salary, department_id) " \
     "VALUES (?, ?, ?, ?, ?, ?, ?)"
-cur.execute(sql, ('John', 'Doe', 'johndoe1@example.com',
+cur.execute(sql, ('Gil-dong', 'Hong', 'hong1@example.com',
                   '2023-07-15', 'IT_PROG', 5000, 90))
 '''
 insert(삽입), update(수정), delete(삭제)
