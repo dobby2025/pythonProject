@@ -88,12 +88,6 @@ class BoardApp(tk.Tk):
 
 
 
-
-
-
-
-
-
 # 실행코드
 if __name__ == '__main__':
     app = BoardApp()
