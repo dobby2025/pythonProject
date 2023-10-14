@@ -341,24 +341,6 @@ class BoardUpdateDialog(tk.Toplevel):
         self.master.initBoardList()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 실행코드
 if __name__ == '__main__':
     app = BoardApp()
