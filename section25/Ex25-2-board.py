@@ -18,7 +18,7 @@ class BoardApp(tk.Tk):
         self.textfield_search = tk.Entry(self)  # 검색 텍스트 필드
         self.button_search = tk.Button(self, text='검색', command=self.onclick_search)  # 검색 버튼
         self.button_insert = tk.Button(self, text='신규', command=self.onclick_insert)  # 신규 버튼
-        self.button_update = tk.Button(self, text='수정')  # 수정 버튼
+        self.button_update = tk.Button(self, text='수정', command=self.onclick_update)  # 수정 버튼
         self.button_delete = tk.Button(self, text='삭제')  # 삭제 버튼
         self.treeview_boardList = ttk.Treeview(self,
                                                columns=('id', 'title', 'writer', 'date'),
@@ -143,7 +143,19 @@ class BoardApp(tk.Tk):
         # 글쓰기 새창 열기
         insert_dialog = BoardInsertDialog(self)
         self.wait_window(insert_dialog)
+        
+    # 수정버튼 클릭
+    def onclick_update(self):
+        selection = self.treeview_boardList.selection()
+        if not selection:
+            msg.showwarning('경고', '수정할 게시글을 선택하세요.')
 
+        board_id = self.treeview_boardList.item(selection, 'values')[0]
+        row = self.get_board(board_id)
+
+        # 수정 창 열기
+        update_dialog = BoardUpdateDialog(self, row)
+        self.wait_window(update_dialog)
 
 
 
@@ -173,7 +185,6 @@ class BoardViewDialog(tk.Toplevel):
                                   ))
 
 
-
 class BoardInsertDialog(tk.Toplevel):
 
     def __init__(self, parent):
@@ -181,29 +192,129 @@ class BoardInsertDialog(tk.Toplevel):
         self.title('새 글 쓰기')
 
         # 컨트롤 변수 선언
-
-
         self.label_title = tk.Label(self, text='제목')
         self.textfield_title = tk.Entry(self)
         self.label_writer = tk.Label(self, text='작성자')
         self.textfield_writer = tk.Entry(self)
         self.label_content = tk.Label(self, text='내용')
         self.textarea_content = scrolledtext.ScrolledText(self)
-        self.button_save = tk.Button(self, text='저장') # command=self.onclick_save
+        self.button_save = tk.Button(self, text='저장', command=self.onclick_save)
         self.button_close = tk.Button(self, text='닫기', command=self.destroy)
 
         # 컨트롤 배치
         self.label_title.pack(side=tk.TOP, padx=5, pady=5)
-        self.textfield_title.pack(side=tk.TOP, padx=5, pady=5)
+        self.textfield_title.pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
         self.label_writer.pack(side=tk.TOP, padx=5, pady=5)
-        self.textfield_writer.pack(side=tk.TOP, padx=5, pady=5)
+        self.textfield_writer.pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
         self.label_content.pack(side=tk.TOP, padx=5, pady=5)
         self.textarea_content.pack(side=tk.TOP, padx=5, pady=5, fill=tk.BOTH, expand=True)
+        self.button_save.pack(side=tk.LEFT, padx=5, pady=5)
         self.button_close.pack(side=tk.RIGHT, padx=5, pady=5)
 
         self.geometry('+%d+%d' % (parent.winfo_rootx() + parent.winfo_width() / 2 - self.winfo_width() / 2,
                                   parent.winfo_rooty() + parent.winfo_height() / 2 - self.winfo_height() / 2
                                   ))
+
+
+    def onclick_save(self):
+        title = self.textfield_title.get()
+        writer = self.textfield_writer.get()
+        content = self.textarea_content.get('1.0', tk.END)
+
+        # 데이터베이스 연결
+        conn = sqlite3.connect('py_board.db')
+        curs = conn.cursor()
+
+        # SQL 실행문
+        sql = '''INSERT INTO PY_BOARD (BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT)         
+                VALUES (:1, :2, :3)
+            '''
+        curs.execute(sql, (title, writer, content))
+        conn.commit()
+
+        # 데이터베이스 연결해제
+        curs.close()
+        conn.close()
+
+        # 다이어로그 닫기
+        self.destroy()
+
+        self.master.initBoardList()
+
+
+class BoardUpdateDialog(tk.Toplevel):
+    def __init__(self, parent, row):
+        super().__init__(parent)
+
+        self.title('게시글 수정')
+
+        # 수정할 게시글 정보 가져오기
+        self.board_id = row[0]
+        self.board_title = row[1]
+        self.board_writer = row[2]
+        self.board_content = row[3]
+
+        # 컨트롤 변수 선언
+        self.label_title = tk.Label(self, text='제목')
+        self.textfield_title = tk.Entry(self)
+        self.label_writer = tk.Label(self, text='작성자')
+        self.textfield_writer = tk.Entry(self)
+        self.label_content = tk.Label(self, text='내용')
+        self.textarea_content = scrolledtext.ScrolledText(self)
+        self.button_save = tk.Button(self, text='저장', command=self.onclick_save)
+        self.button_close = tk.Button(self, text='닫기', command=self.destroy)
+
+        self.textfield_title.insert(0, self.board_title)
+        self.textfield_writer.insert(0, self.board_writer)
+        self.textarea_content.insert(tk.END, self.board_content)
+
+        # 컨트롤 배치
+        self.label_title.pack(side=tk.TOP, padx=5, pady=5)
+        self.textfield_title.pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
+        self.label_writer.pack(side=tk.TOP, padx=5, pady=5)
+        self.textfield_writer.pack(side=tk.TOP, padx=5, pady=5, fill=tk.X)
+        self.label_content.pack(side=tk.TOP, padx=5, pady=5)
+        self.textarea_content.pack(side=tk.TOP, padx=5, pady=5, fill=tk.BOTH, expand=True)
+        self.button_save.pack(side=tk.LEFT, padx=5, pady=5)
+        self.button_close.pack(side=tk.RIGHT, padx=5, pady=5)
+
+        self.geometry('+%d+%d' % (parent.winfo_rootx() + parent.winfo_width() / 2 - self.winfo_width() / 2,
+                                  parent.winfo_rooty() + parent.winfo_height() / 2 - self.winfo_height() / 2
+                                  ))
+
+    def onclick_save(self):
+        title = self.textfield_title.get()
+        writer = self.textfield_writer.get()
+        content = self.textarea_content.get('1.0', tk.END)
+
+        # 데이터베이스 연결
+        conn = sqlite3.connect('py_board.db')
+        curs = conn.cursor()
+
+        # SQL 실행문
+        sql = ''' UPDATE PY_BOARD 
+                  SET
+                    BOARD_TITLE=:1, 
+                    BOARD_WRITER=:2, 
+                    BOARD_CONTENT=:3 
+                  WHERE BOARD_ID=:4
+            '''
+        curs.execute(sql, (title, writer, content, self.board_id))
+        conn.commit()
+
+        # 데이터베이스 연결해제
+        curs.close()
+        conn.close()
+
+        # 다이어로그 닫기
+        self.destroy()
+
+        self.master.initBoardList()
+
+
+
+
+
 
 
 
