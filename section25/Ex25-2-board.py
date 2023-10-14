@@ -9,14 +9,14 @@ from tkinter import messagebox as msg
 import sqlite3
 
 class BoardApp(tk.Tk):
-    def __init__(self):
+    def __init__(self):     # BoardApp 생성자
         super().__init__()
 
         self.title('게시판')
 
         self.combobox_search = ttk.Combobox(self)  # 검색 콤보 박스
         self.textfield_search = tk.Entry(self)  # 검색 텍스트 필드
-        self.button_search = tk.Button(self, text='검색')  # 검색 버튼
+        self.button_search = tk.Button(self, text='검색', command=self.onclick_search)  # 검색 버튼
         self.button_insert = tk.Button(self, text='신규')  # 신규 버튼
         self.button_update = tk.Button(self, text='수정')  # 수정 버튼
         self.button_delete = tk.Button(self, text='삭제')  # 삭제 버튼
@@ -52,11 +52,14 @@ class BoardApp(tk.Tk):
         # 초기화면 데이터 검색
         self.initBoardList()
 
-
     # 게시판 초기화
     def initBoardList(self):
 
         rows = self.getBoardList()
+
+        # 트리뷰 초기화
+        self.treeview_boardList.delete(*self.treeview_boardList.get_children())
+        self.treeview_boardList.bind('<Double-Button-1>', self.onclick_view)
 
         for row in rows:
             self.treeview_boardList.insert('', 'end', text='',
@@ -85,6 +88,94 @@ class BoardApp(tk.Tk):
         conn.close()
 
         return rows
+
+    # 검색버튼 클릭
+    def onclick_search(self):
+
+        keyword = self.textfield_search.get()
+
+        search_option = self.combobox_search.get()
+
+        # PY_BOARD 데이터 불러오기
+        rows = self.getBoardList(keyword, search_option)
+
+        # 트리뷰 초기화
+        self.treeview_boardList.delete(*self.treeview_boardList.get_children())
+        self.treeview_boardList.bind('<Double-Button-1>', self.onclick_view)
+
+        # 게시글 목록 출력
+        for row in rows:
+            self.treeview_boardList.insert('', 'end', text='', values=row)
+
+
+    def onclick_view(self, event):
+        selection = self.treeview_boardList.selection()
+
+        if not selection:
+            return
+
+        board_id = self.treeview_boardList.item(selection, 'values')[0]
+
+        row = self.get_board(board_id)  # 게시글 상세조회
+        view_dialog = BoardViewDialog(self, row)
+        self.wait_window(view_dialog)
+
+
+    def get_board(self, board_id):
+        conn = sqlite3.connect('py_board.db')
+        curs = conn.cursor()
+
+        sql = f'''
+                SELECT BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_CONTENT, BOARD_DATE
+                FROM PY_BOARD
+                WHERE BOARD_ID = :1                
+                '''
+        curs.execute(sql, (board_id,))
+        row = curs.fetchone()
+
+        curs.close()
+        conn.close()
+
+        return row
+
+
+class BoardViewDialog(tk.Toplevel):
+
+    def __init__(self, parent, row):
+        super().__init__(parent)
+        self.title('게시글 보기')
+
+        # 컨트롤 변수 선언
+        self.label_title = tk.Label(self, text=row[1], font=('Arial', 14, 'bold'))
+        self.label_writer = tk.Label(self, text=row[2], font=('Arial', 12))
+        self.textarea_content = scrolledtext.ScrolledText(self)
+        self.button_close = tk.Button(self, text='닫기', command=self.destroy)
+
+        # 컨트롤 배치
+        self.label_title.pack(side=tk.TOP, padx=5, pady=5)
+        self.label_writer.pack(side=tk.TOP, padx=5, pady=5)
+        self.textarea_content.pack(side=tk.TOP, padx=5, pady=5, fill=tk.BOTH, expand=True)
+        self.button_close.pack(side=tk.RIGHT, padx=5, pady=5)
+
+        # 게시글 내용 출력
+        self.textarea_content.insert(tk.END, row[3])
+
+        self.geometry('+%d+%d' % (parent.winfo_rootx() + parent.winfo_width() / 2 - self.winfo_width() / 2,
+                                  parent.winfo_rooty() + parent.winfo_height() / 2 - self.winfo_height() / 2
+                                  ))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
