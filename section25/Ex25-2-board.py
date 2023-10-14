@@ -19,7 +19,7 @@ class BoardApp(tk.Tk):
         self.button_search = tk.Button(self, text='검색', command=self.onclick_search)  # 검색 버튼
         self.button_insert = tk.Button(self, text='신규', command=self.onclick_insert)  # 신규 버튼
         self.button_update = tk.Button(self, text='수정', command=self.onclick_update)  # 수정 버튼
-        self.button_delete = tk.Button(self, text='삭제')  # 삭제 버튼
+        self.button_delete = tk.Button(self, text='삭제', command=self.onclick_delete)  # 삭제 버튼
         self.treeview_boardList = ttk.Treeview(self,
                                                columns=('id', 'title', 'writer', 'date'),
                                                show='headings'
@@ -149,6 +149,7 @@ class BoardApp(tk.Tk):
         selection = self.treeview_boardList.selection()
         if not selection:
             msg.showwarning('경고', '수정할 게시글을 선택하세요.')
+            return
 
         board_id = self.treeview_boardList.item(selection, 'values')[0]
         row = self.get_board(board_id)
@@ -156,6 +157,34 @@ class BoardApp(tk.Tk):
         # 수정 창 열기
         update_dialog = BoardUpdateDialog(self, row)
         self.wait_window(update_dialog)
+
+    def onclick_delete(self):
+        selection = self.treeview_boardList.selection()
+        if not selection:
+            msg.showwarning('경고', '삭제할 게시글을 선택하세요!')
+            return
+
+        board_id = self.treeview_boardList.item(selection, 'values')[0]
+
+        self._delete(board_id)
+
+
+    # 데이터베이스 데이터 삭제
+    def _delete(self, board_id):
+        conn = sqlite3.connect('py_board.db')
+        curs = conn.cursor()
+
+        sql = 'DELETE FROM PY_BOARD where BOARD_ID = :1'
+        curs.execute(sql, (board_id))
+        conn.commit()
+
+        curs.close()
+        conn.close()
+
+        # 게시글 목록 초기화
+        self.initBoardList()
+
+
 
 
 
