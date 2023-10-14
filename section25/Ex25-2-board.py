@@ -17,7 +17,7 @@ class BoardApp(tk.Tk):
         self.combobox_search = ttk.Combobox(self)  # 검색 콤보 박스
         self.textfield_search = tk.Entry(self)  # 검색 텍스트 필드
         self.button_search = tk.Button(self, text='검색', command=self.onclick_search)  # 검색 버튼
-        self.button_insert = tk.Button(self, text='신규')  # 신규 버튼
+        self.button_insert = tk.Button(self, text='신규', command=self.onclick_insert)  # 신규 버튼
         self.button_update = tk.Button(self, text='수정')  # 수정 버튼
         self.button_delete = tk.Button(self, text='삭제')  # 삭제 버튼
         self.treeview_boardList = ttk.Treeview(self,
@@ -138,6 +138,14 @@ class BoardApp(tk.Tk):
 
         return row
 
+    # 신규버튼 클릭
+    def onclick_insert(self):
+        # 글쓰기 새창 열기
+        insert_dialog = BoardInsertDialog(self)
+        self.wait_window(insert_dialog)
+
+
+
 
 class BoardViewDialog(tk.Toplevel):
 
@@ -164,6 +172,38 @@ class BoardViewDialog(tk.Toplevel):
                                   parent.winfo_rooty() + parent.winfo_height() / 2 - self.winfo_height() / 2
                                   ))
 
+
+
+class BoardInsertDialog(tk.Toplevel):
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.title('새 글 쓰기')
+
+        # 컨트롤 변수 선언
+
+
+        self.label_title = tk.Label(self, text='제목')
+        self.textfield_title = tk.Entry(self)
+        self.label_writer = tk.Label(self, text='작성자')
+        self.textfield_writer = tk.Entry(self)
+        self.label_content = tk.Label(self, text='내용')
+        self.textarea_content = scrolledtext.ScrolledText(self)
+        self.button_save = tk.Button(self, text='저장') # command=self.onclick_save
+        self.button_close = tk.Button(self, text='닫기', command=self.destroy)
+
+        # 컨트롤 배치
+        self.label_title.pack(side=tk.TOP, padx=5, pady=5)
+        self.textfield_title.pack(side=tk.TOP, padx=5, pady=5)
+        self.label_writer.pack(side=tk.TOP, padx=5, pady=5)
+        self.textfield_writer.pack(side=tk.TOP, padx=5, pady=5)
+        self.label_content.pack(side=tk.TOP, padx=5, pady=5)
+        self.textarea_content.pack(side=tk.TOP, padx=5, pady=5, fill=tk.BOTH, expand=True)
+        self.button_close.pack(side=tk.RIGHT, padx=5, pady=5)
+
+        self.geometry('+%d+%d' % (parent.winfo_rootx() + parent.winfo_width() / 2 - self.winfo_width() / 2,
+                                  parent.winfo_rooty() + parent.winfo_height() / 2 - self.winfo_height() / 2
+                                  ))
 
 
 
