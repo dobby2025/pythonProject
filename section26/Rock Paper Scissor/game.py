@@ -30,7 +30,6 @@ class Application(tk.Frame):
                         'scissor':scissor_list
                         }
 
-
     def main_frame(self):
         self.main = tk.Frame(self, width=400, height=300, bg='white')
         self.main.grid(row=0, column=0)
@@ -69,11 +68,9 @@ class Application(tk.Frame):
             self.rock_user.bind('<Button-1>', lambda event, m='rock': self.move(m))
             self.paper_user.bind('<Button-1>', lambda event, m='paper': self.move(m))
             self.scissor_user.bind('<Button-1>', lambda event, m='scissor': self.move(m))
-
         else:
             messagebox.showwarning('가위 바위 보', '사용자 이름을 입력하세요!')
             self.name_entry.focus_set()
-
 
     def draw_frames(self):
         self.header = tk.Frame(self, width=400, height=100)
@@ -171,8 +168,10 @@ class Application(tk.Frame):
         self.home_btn = ttk.Button(self.footer, text='Home', command=self.go_home)
         self.home_btn.grid(row=0, column=1, padx=(120,10), sticky='w')
 
-
     def reset_game(self):
+        if self.after_id:
+            self.after_cancel(self.after_id)
+
         self.l1['image'] = ''
         self.r1['image'] = ''
 
@@ -181,8 +180,7 @@ class Application(tk.Frame):
 
         self.upoint['text'] = f'({self.userPoint})'
         self.spoint['text'] = f'({self.sysPoint})'
-        self.winner_msg = ''
-
+        self.winner_msg['text'] = ''
 
     def go_home(self):
         self.reset_game()
@@ -195,6 +193,8 @@ class Application(tk.Frame):
     
     def move(self, user_move):
         self.imIndex = 0
+        if self.after_id:
+            self.after_cancel(self.after_id)
 
         print('move 메서드')
         print(f'user_move: {user_move}')
@@ -216,15 +216,20 @@ class Application(tk.Frame):
             image2 = scissor_large
 
         winner = self.check_winner(user_move, sys_move)
+        self.update_winner(winner)
 
         if winner == 'You Won!':
             self.anmate = True
             list_ = self.imgDict[user_move]
             # winner 이미지 애니메이션
-            
+            self.after_id = self.after(100, lambda : self.animate_winner('user', list_))
             self.r1['image'] = image2
+
         elif winner == 'You Lost!':
             self.l1['image'] = image1
+            list_ = self.imgDict[sys_move]
+            # winner 이미지 애니메이션
+            self.after_id = self.after(100, lambda: self.animate_winner('sys', list_))
         else:
             self.l1['image'] = image1
             self.r1['image'] = image2
@@ -271,17 +276,19 @@ class Application(tk.Frame):
 
         self.after_id = self.after(70, lambda : self.animate_winner(winner, img_list))
 
-
-
-
-
-
-
-
-
-
-
-
+    def update_winner(self, winner):
+        if winner == 'You Won!':
+            fg = 'green'
+            self.userPoint += 1
+            self.upoint['text'] = f'({self.userPoint})'
+        elif winner == 'You Lost!':
+            fg = 'red'
+            self.sysPoint += 1
+            self.spoint['text'] = f'({self.sysPoint})'
+        else:
+            fg = 'gray'
+        self.winner_msg['fg'] = fg
+        self.winner_msg['text'] = winner
 
 if __name__ == '__main__':
     root = tk.Tk()
