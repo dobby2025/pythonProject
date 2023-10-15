@@ -149,12 +149,33 @@ class Application(tk.Frame):
         self.winner_msg.grid(row=2, column=1, columnspan=4)
 
     def draw_footer_frame(self):
-        self.reset_btn = ttk.Button(self.footer, text='Reset')
-        self.reset_btn.grid(row=0, column=0, padx=(120,20))
+        self.reset_btn = ttk.Button(self.footer, text='Reset', command=self.reset_game)
+        self.reset_btn.grid(row=0, column=0, padx=(30,20))
+
+        self.home_btn = ttk.Button(self.footer, text='Home', command=self.go_home)
+        self.home_btn.grid(row=0, column=1, padx=(120,10), sticky='w')
 
 
+    def reset_game(self):
+        self.l1['image'] = ''
+        self.r1['image'] = ''
+
+        self.userPoint = 0
+        self.sysPoint = 0
+
+        self.upoint['text'] = f'({self.userPoint})'
+        self.spoint['text'] = f'({self.sysPoint})'
+        self.winner_msg = ''
 
 
+    def go_home(self):
+        self.reset_game()
+        self.username = tk.StringVar()
+        self.header.destroy()
+        self.body.destroy()
+        self.footer.destroy()
+
+        self.main_frame()
 
 
 if __name__ == '__main__':
