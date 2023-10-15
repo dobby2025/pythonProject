@@ -52,9 +52,9 @@ class Application(tk.Frame):
             # 헤더 프레임 구현
             self.draw_header_frame()
             # 바디 프레임 구현
-            self.draw_body_fram()
+            self.draw_body_frame()
             # 푸터 프레임 구현
-            self.draw_footer_fram()
+            self.draw_footer_frame()
         else:
             messagebox.showwarning('가위 바위 보', '사용자 이름을 입력하세요!')
             self.name_entry.focus_set()
@@ -108,7 +108,7 @@ class Application(tk.Frame):
                                font='verdana 10')
         self.spoint.grid(row=1, column=0, sticky='news')
 
-    def draw_body_fram(self):
+    def draw_body_frame(self):
         self.rock_user = tk.Label(self.body, image=rock_small, cursor='hand2')
         self.rock_user.grid(row=0, column=0, pady=(5,0), padx=(45, 10))
 
@@ -148,6 +148,9 @@ class Application(tk.Frame):
                                    font='verdana 16 bold')
         self.winner_msg.grid(row=2, column=1, columnspan=4)
 
+    def draw_footer_frame(self):
+        self.reset_btn = ttk.Button(self.footer, text='Reset')
+        self.reset_btn.grid(row=0, column=0, padx=(120,20))
 
 
 
