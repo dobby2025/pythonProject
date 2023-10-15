@@ -8,7 +8,6 @@ import tkinter.ttk as ttk
 from tkinter import PhotoImage
 from tkinter import messagebox
 
-
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master=master)
