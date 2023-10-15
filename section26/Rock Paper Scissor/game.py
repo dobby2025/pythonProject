@@ -51,15 +51,18 @@ class Application(tk.Frame):
             self.draw_frames()
             # 헤더 프레임 구현
             self.draw_header_frame()
-
+            # 바디 프레임 구현
+            self.draw_body_fram()
+            # 푸터 프레임 구현
+            self.draw_footer_fram()
         else:
             messagebox.showwarning('가위 바위 보', '사용자 이름을 입력하세요!')
             self.name_entry.focus_set()
 
     def draw_frames(self):
-        self.header = tk.Frame(self, width=400, height=100)
+        self.header = tk.Frame(self, width=400, height=100, bg='red')
         self.body = tk.Frame(self, width=400, height=170, bg='blue')
-        self.footer = tk.Frame(self, width=400, height=30, bg='green' )
+        self.footer = tk.Frame(self, width=400, height=30, bg='green')
 
         self.header.grid(row=0, column=0)
         self.body.grid(row=1, column=0)
@@ -104,6 +107,50 @@ class Application(tk.Frame):
         self.spoint = tk.Label(self.right, text=f'({self.sysPoint})', fg='dodgerblue3',
                                font='verdana 10')
         self.spoint.grid(row=1, column=0, sticky='news')
+
+    def draw_body_fram(self):
+        self.rock_user = tk.Label(self.body, image=rock_small, cursor='hand2')
+        self.rock_user.grid(row=0, column=0, pady=(5,0), padx=(45, 10))
+
+        self.paper_user = tk.Label(self.body, image=paper_small, cursor='hand2')
+        self.paper_user.grid(row=1, column=0, pady=(5, 0), padx=(45, 10))
+
+        self.scissor_user = tk.Label(self.body, image=scissor_small, cursor='hand2')
+        self.scissor_user.grid(row=2, column=0, pady=(5, 0), padx=(45, 10))
+
+        self.rock_system = tk.Label(self.body, image=rock_small, cursor='hand2')
+        self.rock_system.grid(row=0, column=5, pady=(5, 0), padx=(10, 10))
+
+        self.paper_system = tk.Label(self.body, image=paper_small, cursor='hand2')
+        self.paper_system.grid(row=1, column=5, pady=(5, 0), padx=(10, 10))
+
+        self.scissor_system = tk.Label(self.body, image=scissor_small, cursor='hand2')
+        self.scissor_system.grid(row=2, column=5, pady=(5, 0), padx=(10, 10))
+
+        self.result_box = tk.Frame(self.body, width=180, height=100)
+        self.result_box.grid(row=0, column=1, rowspan=2, columnspan=4)
+
+        self.lbox = tk.Frame(self.result_box, width=90, height=100)
+        self.lbox.grid(row=0, column=0)
+        self.lbox.grid_propagate(False)
+
+        self.rbox = tk.Frame(self.result_box, width=90, height=100)
+        self.rbox.grid(row=0, column=1)
+        self.rbox.grid_propagate(False)
+
+        self.l1 = tk.Label(self.lbox, image='')
+        self.l1.grid(row=0, column=0, pady=3, padx=1)
+
+        self.r1 = tk.Label(self.rbox, image='')
+        self.r1.grid(row=0, column=1, pady=3, padx=1)
+
+        self.winner_msg = tk.Label(self.body, text='', fg='green',
+                                   font='verdana 16 bold')
+        self.winner_msg.grid(row=2, column=1, columnspan=4)
+
+
+
+
 
 
 
