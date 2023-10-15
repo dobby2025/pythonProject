@@ -213,7 +213,6 @@ class Application(tk.Frame):
 
 
 
-
     def check_winner(self, user_move, sys_move):
         res = None
         if user_move == 'rock':
