@@ -1,5 +1,5 @@
 '''
-파일명: Ex15-2-object.py
+파일명: Ex15-2-objects.py
 '''
 class Calculator:
     def input_expr(self):

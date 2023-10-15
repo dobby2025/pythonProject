@@ -1,5 +1,5 @@
 '''
-파일명: Ex15-1-object.py
+파일명: Ex15-1-objects.py
 
 클래스(class)
     클래스는 객체를 생성하기 위한 템플릿.
