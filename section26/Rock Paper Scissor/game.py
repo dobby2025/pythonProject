@@ -20,6 +20,7 @@ class Application(tk.Frame):
 
         self.userPoint = 0
         self.sysPoint = 0
+        self.moves = ['rock', 'paper', 'scissor']
 
     def main_frame(self):
         self.main = tk.Frame(self, width=400, height=300, bg='white')
@@ -55,14 +56,17 @@ class Application(tk.Frame):
             self.draw_body_frame()
             # 푸터 프레임 구현
             self.draw_footer_frame()
+
+            self.rock_user.bind('<Button-1>', lambda event, m='rock': self.move(m))
         else:
             messagebox.showwarning('가위 바위 보', '사용자 이름을 입력하세요!')
             self.name_entry.focus_set()
 
+
     def draw_frames(self):
-        self.header = tk.Frame(self, width=400, height=100, bg='red')
-        self.body = tk.Frame(self, width=400, height=170, bg='blue')
-        self.footer = tk.Frame(self, width=400, height=30, bg='green')
+        self.header = tk.Frame(self, width=400, height=100)
+        self.body = tk.Frame(self, width=400, height=170)
+        self.footer = tk.Frame(self, width=400, height=30)
 
         self.header.grid(row=0, column=0)
         self.body.grid(row=1, column=0)
@@ -176,6 +180,72 @@ class Application(tk.Frame):
         self.footer.destroy()
 
         self.main_frame()
+    
+    def move(self, user_move):
+        print('move 메서드')
+        print(f'user_move: {user_move}')
+        sys_move = random.choice(self.moves)
+        print(f'user_move: {sys_move}')
+
+        if user_move == 'rock':
+            image1 = rock_large
+        elif user_move == 'paper':
+            image1 = paper_large
+        elif user_move == 'scissor':
+            image1 = scissor_large
+
+        if sys_move == 'rock':
+            image2 = rock_large
+        elif sys_move == 'paper':
+            image2 = paper_large
+        elif sys_move == 'scissor':
+            image2 = scissor_large
+
+        winner = self.check_winner(user_move, sys_move)
+
+        if winner == 'You Won!':
+            self.r1['image'] = image2
+        elif winner == 'You Lost!':
+            self.l1['image'] = image1
+        else:
+            self.l1['image'] = image1
+            self.r1['image'] = image2
+
+
+
+
+    def check_winner(self, user_move, sys_move):
+        res = None
+        if user_move == 'rock':
+            if sys_move == 'rock':
+                res = 'Draw'
+            elif sys_move == 'paper':
+                res = 'You Lost!'
+            elif sys_move == 'scissor':
+                res = 'You Won!'
+        elif user_move == 'paper':
+            if sys_move == 'rock':
+                res = 'You Won!'
+            elif sys_move == 'paper':
+                res = 'Draw'
+            elif sys_move == 'scissor':
+                res = 'You Lost!'
+        elif user_move == 'scissor':
+            if sys_move == 'rock':
+                res = 'You Lost!'
+            elif sys_move == 'paper':
+                res = 'You Won!'
+            elif sys_move == 'scissor':
+                res = 'Draw'
+
+        return res
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
