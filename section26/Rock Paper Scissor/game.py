@@ -20,7 +20,16 @@ class Application(tk.Frame):
 
         self.userPoint = 0
         self.sysPoint = 0
+        self.imIndex = 0
+        self.imDelta = 1
         self.moves = ['rock', 'paper', 'scissor']
+        self.after_id = None
+        self.imgDict = {
+                        'rock':rock_list,
+                        'paper':paper_list,
+                        'scissor':scissor_list
+                        }
+
 
     def main_frame(self):
         self.main = tk.Frame(self, width=400, height=300, bg='white')
@@ -58,6 +67,9 @@ class Application(tk.Frame):
             self.draw_footer_frame()
 
             self.rock_user.bind('<Button-1>', lambda event, m='rock': self.move(m))
+            self.paper_user.bind('<Button-1>', lambda event, m='paper': self.move(m))
+            self.scissor_user.bind('<Button-1>', lambda event, m='scissor': self.move(m))
+
         else:
             messagebox.showwarning('가위 바위 보', '사용자 이름을 입력하세요!')
             self.name_entry.focus_set()
@@ -182,6 +194,8 @@ class Application(tk.Frame):
         self.main_frame()
     
     def move(self, user_move):
+        self.imIndex = 0
+
         print('move 메서드')
         print(f'user_move: {user_move}')
         sys_move = random.choice(self.moves)
@@ -204,14 +218,16 @@ class Application(tk.Frame):
         winner = self.check_winner(user_move, sys_move)
 
         if winner == 'You Won!':
+            self.anmate = True
+            list_ = self.imgDict[user_move]
+            # winner 이미지 애니메이션
+            
             self.r1['image'] = image2
         elif winner == 'You Lost!':
             self.l1['image'] = image1
         else:
             self.l1['image'] = image1
             self.r1['image'] = image2
-
-
 
     def check_winner(self, user_move, sys_move):
         res = None
@@ -238,6 +254,26 @@ class Application(tk.Frame):
                 res = 'Draw'
 
         return res
+
+    def animate_winner(self, winner, img_list):
+        img = img_list[self.imIndex]
+        if self.imIndex == 0:
+            self.imDelta = 1
+        if self.imIndex == 10:
+            self.imDelta = -1
+
+        self.imIndex += self.imDelta
+
+        if winner == 'user':
+            self.l1.configure(image=img)
+        elif winner == 'sys':
+            self.r1.configure(image=img)
+
+        self.after_id = self.after(70, lambda : self.animate_winner(winner, img_list))
+
+
+
+
 
 
 
