@@ -26,12 +26,25 @@ start_img = pygame.image.load('Assets/start_img.png')
 start_img = pygame.transform.scale(start_img, (60, 64))
 
 DAYMODE = True     # 게임 내의 낮과 밤 모드 전환변수
-start_page = True   # 게임 시작 화면 여부를 나타내는 변수
+start_page = True  # 게임 시작 화면 여부를 나타내는 변수
+jump = False       # 공룡의 점프 동작 여부를 나타내는 변수
+duck = False       # 공룡의 웅크리기 동작 여부를 나타내는 변수
 
 ground = Ground()
 dino = Dino(50, 160)
 
 SPEED = 1   # 게임의 초기 속도
+
+counter = 0 # 게임 루프 반복횟수 계산하는 변수
+def reset():
+    global counter, SPEED
+
+    # 게임 상태 초기화
+    counter = 0 # 카운터 초기화
+    SPEED = 1
+
+    dino.reset()
+
 
 running = True  # 게임 실행여부 변수
 while running:  # 게임 루프 시작
@@ -52,25 +65,34 @@ while running:  # 게임 루프 시작
                 running = False
 
             if event.key == pygame.K_SPACE:
-                start_page = False  # 스페이스 키로 게임 시작 화면 닫음
+                if start_page:
+                    start_page = False  # 스페이스 키로 게임 시작 화면 닫음
+                elif dino.alive:
+                    jump = True
+                else:
+                    reset()
 
+            if event.key == pygame.K_UP:
+                jump = True
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
+                jump = False
 
     if start_page:
         print('시작 화면')
         win.blit(start_img, (50, 100))
     else:
-        print('# 게임 진행 화면')
+        # print('# 게임 진행 화면')
         ground.update(SPEED)
         ground.draw(win)
 
-        dino.update()
+        dino.update(jump)
         dino.draw(win)
 
 
     pygame.draw.rect(win, WHITE, (0, 0, WIDTH, HEIGHT), 4)  # 화면 테두리 그리기
     clock.tick(FPS)     # 게임 루프의 주기를 제어합니다.
     pygame.display.update()     # 화면을 업데이트 합니다.
-
-
 
 pygame.quit()   #게임 루프를 종료하고 pygame을 종료한다.

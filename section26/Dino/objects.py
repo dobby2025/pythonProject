@@ -56,6 +56,11 @@ class Dino():
 
         self.reset()
 
+        self.vel = 0        # 공룡의 수직속도를 초기화합니다.
+        self.gravity = 1    # 중력 가속도를 설정합니다.
+        self.jumpHeight = 15    # 점프 높이를 설정합니다.
+        self.isJumping = False  # 현재 점프 중인지 여부를 나타내는 플래그 입니다.
+
     def reset(self):
         """
         공룡의 초기 상태 설정하는 메서드
@@ -69,18 +74,38 @@ class Dino():
         self.alive = True   # 공룡의 생존여부
         self.counter = 0    # 애니메이션 프레임 전환용으로 사용합니다.
         
-    def update(self):
+    def update(self, jump):
         # 공룡이 생존하는경우
         if self.alive:
-            # 달리기 애니메이션 처리합니다.
-            self.counter += 1
-            if self.counter >= 4:
-                self.index = (self.index + 1) % len(self.run_list)
-                self.image = self.run_list[self.index]
-                self.rect = self.image.get_rect()
-                self.rect.x = self.x
+            print(jump)
+            if not self.isJumping and jump:
+                self.vel = -self.jumpHeight
+                self.isJumping = True
+
+            # 중력에 따라 수직 속도를 조절합니다.
+            self.vel += self.gravity
+            if self.vel >= self.jumpHeight:
+                self.vel = self.jumpHeight
+
+            self.rect.y += self.vel
+            if self.rect.bottom > self.base:
                 self.rect.bottom = self.base
+                self.isJumping = False
+
+            if self.isJumping:
+                self.index = 0
                 self.counter = 0
+                self.image = self.run_list[self.index]
+            else:
+                # 달리기 애니메이션 처리합니다.
+                self.counter += 1
+                if self.counter >= 4:
+                    self.index = (self.index + 1) % len(self.run_list)
+                    self.image = self.run_list[self.index]
+                    self.rect = self.image.get_rect()
+                    self.rect.x = self.x
+                    self.rect.bottom = self.base
+                    self.counter = 0
         else:
             # 죽은 상태의 이미지를 표시합니다.
             self.image = self.dead_image
