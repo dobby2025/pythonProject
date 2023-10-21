@@ -1,5 +1,14 @@
 '''
 파일명: Ex25-2-board.py
+
+Python 실행파일 만들기
+
+pip install pyinstaller
+
+pyinstaller ./section25/Ex25-2-board.py -w -F
+
+
+
 '''
 
 import tkinter as tk

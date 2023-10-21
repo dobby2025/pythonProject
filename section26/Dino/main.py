@@ -1,6 +1,9 @@
 '''
 pygame
     파이썬 언어를 기반으로 한 오픈 소스 게임 개발 라이브러리이다.
+
+
+pyinstaller ./section26/Dino/main.py -w -F
 '''
 import random
 
