@@ -27,6 +27,19 @@ GRAY = (32, 33, 36)
 start_img = pygame.image.load('Assets/start_img.png')
 start_img = pygame.transform.scale(start_img, (60, 64))
 
+# 게임 오버 이미지 로드 및 크기 조절
+game_over_img = pygame.image.load('Assets/game_over.png')
+game_over_img = pygame.transform.scale(game_over_img, (200, 36))
+
+# 리플레이 이미지 로드 및 크기 조절
+replay_img = pygame.image.load('Assets/replay.png')
+replay_img = pygame.transform.scale(replay_img, (40, 36))
+
+# 리플레이 버튼의 위치 설정
+replay_rect = replay_img.get_rect()
+replay_rect.x = WIDTH // 2 - 20
+replay_rect.y = 100
+
 DAYMODE = True     # 게임 내의 낮과 밤 모드 전환변수
 start_page = True  # 게임 시작 화면 여부를 나타내는 변수
 jump = False       # 공룡의 점프 동작 여부를 나타내는 변수
@@ -147,6 +160,7 @@ while running:  # 게임 루프 시작
                 SPEED = 0
                 dino.alive = False
 
+
         ground.update(SPEED)
         ground.draw(win)
 
@@ -158,6 +172,10 @@ while running:  # 게임 루프 시작
 
         ptera_group.update(SPEED, dino)
         ptera_group.draw(win)
+
+        if not dino.alive:
+            win.blit(game_over_img, (WIDTH // 2 - 100, 55))
+            win.blit(replay_img, replay_rect)
 
     pygame.draw.rect(win, WHITE, (0, 0, WIDTH, HEIGHT), 4)  # 화면 테두리 그리기
     clock.tick(FPS)     # 게임 루프의 주기를 제어합니다.
