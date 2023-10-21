@@ -85,6 +85,7 @@ while running:  # 게임 루프 시작
                 duck = False
 
 
+
     if start_page:
         print('시작 화면')
         win.blit(start_img, (50, 100))
