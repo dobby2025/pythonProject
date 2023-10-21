@@ -4,7 +4,7 @@ pygame
 '''
 import pygame
 
-from objects import Ground
+from objects import Ground, Dino
 
 # pygame 초기화
 pygame.init()
@@ -29,6 +29,7 @@ DAYMODE = True     # 게임 내의 낮과 밤 모드 전환변수
 start_page = True   # 게임 시작 화면 여부를 나타내는 변수
 
 ground = Ground()
+dino = Dino(50, 160)
 
 SPEED = 1   # 게임의 초기 속도
 
@@ -62,6 +63,9 @@ while running:  # 게임 루프 시작
         print('# 게임 진행 화면')
         ground.update(SPEED)
         ground.draw(win)
+
+        dino.update()
+        dino.draw(win)
 
 
     pygame.draw.rect(win, WHITE, (0, 0, WIDTH, HEIGHT), 4)  # 화면 테두리 그리기
