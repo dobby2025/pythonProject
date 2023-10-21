@@ -36,6 +36,9 @@ dino = Dino(50, 160)
 SPEED = 1   # 게임의 초기 속도
 
 counter = 0 # 게임 루프 반복횟수 계산하는 변수
+
+key_pressed = 0
+
 def reset():
     global counter, SPEED
 
@@ -77,12 +80,28 @@ while running:  # 게임 루프 시작
             if event.key == pygame.K_DOWN:
                 duck = True
 
+            if event.key == pygame.K_LEFT:
+                key_pressed = -1
+            elif event.key == pygame.K_RIGHT:
+                key_pressed = 1
+            else:
+                key_pressed = 0
+
+
+
+
         if event.type == pygame.KEYUP:  # 키를 뗏을 때의 이벤트 처리
             if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
                 jump = False    # 스페이스 키 또는 화살표 위 키를 떼면 점프 중지
 
             if event.key == pygame.K_DOWN:
                 duck = False
+
+            if event.key == pygame.K_LEFT:
+                key_pressed = 0
+
+            if event.key == pygame.K_RIGHT:
+                key_pressed = 0
 
 
 
@@ -94,7 +113,7 @@ while running:  # 게임 루프 시작
         ground.update(SPEED)
         ground.draw(win)
 
-        dino.update(jump, duck)
+        dino.update(jump, duck, key_pressed)
         dino.draw(win)
 
 

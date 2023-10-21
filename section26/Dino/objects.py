@@ -74,9 +74,11 @@ class Dino():
         self.alive = True   # 공룡의 생존여부
         self.counter = 0    # 애니메이션 프레임 전환용으로 사용합니다.
         
-    def update(self, jump, duck):
+    def update(self, jump, duck, key_pressed):
         # 공룡이 생존하는경우
         if self.alive:
+
+            self.x += key_pressed
 
             if not self.isJumping and jump:
                 self.vel = -self.jumpHeight
