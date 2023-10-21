@@ -74,10 +74,16 @@ while running:  # 게임 루프 시작
 
             if event.key == pygame.K_UP:
                 jump = True
+            if event.key == pygame.K_DOWN:
+                duck = True
 
-        if event.type == pygame.KEYUP:
+        if event.type == pygame.KEYUP:  # 키를 뗏을 때의 이벤트 처리
             if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
-                jump = False
+                jump = False    # 스페이스 키 또는 화살표 위 키를 떼면 점프 중지
+
+            if event.key == pygame.K_DOWN:
+                duck = False
+
 
     if start_page:
         print('시작 화면')
@@ -87,7 +93,7 @@ while running:  # 게임 루프 시작
         ground.update(SPEED)
         ground.draw(win)
 
-        dino.update(jump)
+        dino.update(jump, duck)
         dino.draw(win)
 
 
