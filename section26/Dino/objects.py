@@ -119,12 +119,52 @@ class Dino():
                     self.rect.x = self.x
                     self.rect.bottom = self.base
                     self.counter = 0
+
+            #공룡의 마스크를 이미지에서 생성합니다.
+            self.mask = pygame.mask.from_surface(self.image)
+
         else:
             # 죽은 상태의 이미지를 표시합니다.
             self.image = self.dead_image
 
     def draw(self, win):
         # 현재 공룡 이미지를 게임 화면의 위치에 그립니다.
+        win.blit(self.image, self.rect)
+
+
+
+
+class Cactus(pygame.sprite.Sprite):
+    def __init__(self, type):
+        super().__init__()
+
+        # 다양한 선인장 이미지를 리스트에 저장합니다.
+        self.image_list = []
+        for i in range(5):
+            scale = 0.65
+            img = pygame.image.load(f'Assets/Cactus/{i + 1}.png')
+            w, h = img.get_size()
+            img = pygame.transform.scale(img, (int(w * scale), int(h * scale)))
+            self.image_list.append(img)
+
+        # 초기 이미지를 설정하고 위치를 초기화합니다.
+        self.image = self.image_list[type - 1]
+        self.rect = self.image.get_rect()
+        self.rect.x = WIDTH + 10
+        self.rect.bottom = 165
+
+    def update(self, speed, dino):
+        if dino.alive:
+            # 선인장을 왼쪽으로 이동하고 화면 밖으로 나가면 삭제합니다.
+            self.rect.x -= speed
+            if self.rect.right <= 0:
+                self.kill()
+
+            # 충돌 검사를 위한 마스크 생성합니다.
+            self.mask = pygame.mask.from_surface(self.image)
+
+    def draw(self, win):
+        # 현재 선인장 이미지를 게임 화면의 위치에 그립니다.
         win.blit(self.image, self.rect)
 
 
