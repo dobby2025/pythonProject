@@ -146,9 +146,6 @@ while running:  # 게임 루프 시작
         cactus_group.update(SPEED, dino)
         cactus_group.draw(win)
 
-
-
-
     pygame.draw.rect(win, WHITE, (0, 0, WIDTH, HEIGHT), 4)  # 화면 테두리 그리기
     clock.tick(FPS)     # 게임 루프의 주기를 제어합니다.
     pygame.display.update()     # 화면을 업데이트 합니다.
