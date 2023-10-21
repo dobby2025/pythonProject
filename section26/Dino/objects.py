@@ -168,6 +168,46 @@ class Cactus(pygame.sprite.Sprite):
         win.blit(self.image, self.rect)
 
 
+class Ptera(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+
+        self.image_list = []
+        for i in range(2):
+            scale = 0.65
+            img = pygame.image.load(f'Assets/Ptera/{i + 1}.png')
+            w, h = img.get_size()
+            img = pygame.transform.scale(img, int(w * scale), int(h * scale))
+            self.image_list.append(img)
+
+        self.index = 0
+        self.image = self.image_list[self.index]
+        self.rect = self.image.get_rect(center = (x, y))
+
+        self.counter = 0
+
+    def update(self, speed, dino):
+
+        if dino.alive:
+            # 익룡을 왼쪽으로 이동시킵니다.
+            self.rect.x -= speed
+
+            # 익룡이 화면 왼쪽 끝을 벗어나면 제거합니다.
+            if self.rect.right <= 0:
+                self.kill()
+
+            # 일정한 프레임마다 이미지를 변경하여 조류가 움직이는 것처럼 보이게 합니다.
+            self.counter += 1
+            if self.counter >= 6:
+                self.index = (self.index + 1) % len(self.image_list)
+                self.image = self.image_list[self.index]
+                self.counter = 0
+
+            self.mask = pygame.mask.from_surface(self.image)
+
+    def draw(self, win):
+        #익룡 화면에 그리기
+        win.blit(self.image, self.rect)
 
 
 

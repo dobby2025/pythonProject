@@ -97,9 +97,6 @@ while running:  # 게임 루프 시작
             else:
                 key_pressed = 0
 
-
-
-
         if event.type == pygame.KEYUP:  # 키를 뗏을 때의 이벤트 처리
             if event.key == pygame.K_SPACE or event.key == pygame.K_UP:
                 jump = False    # 스페이스 키 또는 화살표 위 키를 떼면 점프 중지
@@ -132,10 +129,10 @@ while running:  # 게임 루프 시작
             cactus = Cactus(type)
             cactus_group.add(cactus)
 
-        for cactus in cactus_group:
-            if pygame.sprite.collide_mask(dino, cactus):
-                SPEED = 0
-                dino.alive = False
+        # for cactus in cactus_group:
+        #     if pygame.sprite.collide_mask(dino, cactus):
+        #         SPEED = 0
+        #         dino.alive = False
 
         ground.update(SPEED)
         ground.draw(win)
