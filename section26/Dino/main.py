@@ -33,7 +33,6 @@ dino = Dino(50, 160)
 
 SPEED = 1   # 게임의 초기 속도
 
-
 running = True  # 게임 실행여부 변수
 while running:  # 게임 루프 시작
 
