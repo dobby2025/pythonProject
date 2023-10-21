@@ -6,7 +6,7 @@ import random
 
 import pygame
 
-from objects import Ground, Dino, Cactus
+from objects import Ground, Dino, Cactus, Ptera
 
 # pygame 초기화
 pygame.init()
@@ -44,6 +44,7 @@ MOVESPEED = 3
 enemy_time = 100
 
 cactus_group = pygame.sprite.Group()    # 선인장 그룹
+ptera_group = pygame.sprite.Group()     # 테라 그룹
 
 def reset():
     global counter, SPEED
@@ -52,8 +53,9 @@ def reset():
     counter = 0 # 카운터 초기화
     SPEED = 5
     
-    # 선인장 그룹 초기화
+    # 선인장, 테라 그룹 초기화
     cactus_group.empty()
+    ptera_group.empty()
     
     # 공룡 객체 리셋
     dino.reset()
@@ -125,14 +127,25 @@ while running:  # 게임 루프 시작
 
         # 적 캐릭터(선인장) 생성 및 관리
         if counter % int(enemy_time) == 0:
-            type = random.randint(1, 4)
-            cactus = Cactus(type)
-            cactus_group.add(cactus)
 
-        # for cactus in cactus_group:
-        #     if pygame.sprite.collide_mask(dino, cactus):
-        #         SPEED = 0
-        #         dino.alive = False
+            if random.randint(1, 10) == 5:
+                y = random.choice([85, 130])
+                ptera = Ptera(WIDTH, y)
+                ptera_group.add(ptera)
+            else:
+                type = random.randint(1, 4)
+                cactus = Cactus(type)
+                cactus_group.add(cactus)
+
+        for cactus in cactus_group:
+            if pygame.sprite.collide_mask(dino, cactus):
+                SPEED = 0
+                dino.alive = False
+
+        for ptera in ptera_group:
+            if pygame.sprite.collide_mask(dino, ptera):
+                SPEED = 0
+                dino.alive = False
 
         ground.update(SPEED)
         ground.draw(win)
@@ -142,6 +155,9 @@ while running:  # 게임 루프 시작
 
         cactus_group.update(SPEED, dino)
         cactus_group.draw(win)
+
+        ptera_group.update(SPEED, dino)
+        ptera_group.draw(win)
 
     pygame.draw.rect(win, WHITE, (0, 0, WIDTH, HEIGHT), 4)  # 화면 테두리 그리기
     clock.tick(FPS)     # 게임 루프의 주기를 제어합니다.

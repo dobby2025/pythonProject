@@ -68,7 +68,7 @@ class Dino():
         self.index = 0
         self.image = self.run_list[self.index]
         self.rect = self.image.get_rect()   # 이미지 사각형 영역을 가져옵니다.
-        self.rect.x = self.x    # 공룡의 x좌표를 설정합니다.
+        self.rect.x = self.x = 50   # 공룡의 x좌표를 설정합니다.
         self.rect.bottom = self.base   # 공룡의 바닥 높이를 설정합니다.
         
         self.alive = True   # 공룡의 생존여부
@@ -177,7 +177,7 @@ class Ptera(pygame.sprite.Sprite):
             scale = 0.65
             img = pygame.image.load(f'Assets/Ptera/{i + 1}.png')
             w, h = img.get_size()
-            img = pygame.transform.scale(img, int(w * scale), int(h * scale))
+            img = pygame.transform.scale(img, (int(w * scale), int(h * scale)))
             self.image_list.append(img)
 
         self.index = 0
